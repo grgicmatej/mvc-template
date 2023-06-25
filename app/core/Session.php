@@ -4,20 +4,36 @@ declare(strict_types=1);
 
 class Session
 {
-    private static Session $instance;
-
     public function login($user): void
     {
-        //todo: set session when logged In
+        $_SESSION['user'] = $user;
+        $_SESSION['isLoggedIn'] = true;
     }
 
     public function logout(): void
     {
-        //todo: delete session when logged out
+        unset($_SESSION['user']);
+        unset($_SESSION['isLoggedIn']);
     }
 
     public function isLoggedIn(): bool
     {
-        return isset($_SESSION['is_logged_in']);
+        return isset($_SESSION['isLoggedIn']);
+    }
+
+    public static function startSession($sessionKey, $sessionValue): void
+    {
+        session_start();
+        if(true === isset($_SESSION[$sessionKey])){
+            unset($_SESSION[$sessionValue]);
+        }
+        $_SESSION[$sessionKey]=$sessionValue;
+    }
+
+    public static function stopSession($sessionKey): void
+    {
+        if(true === isset($_SESSION[$sessionKey])){
+            unset($_SESSION[$sessionKey]);
+        }
     }
 }
